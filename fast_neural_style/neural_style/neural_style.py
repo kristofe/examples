@@ -40,6 +40,17 @@ def train(args):
         transforms.ToTensor(),
         transforms.Lambda(lambda x: x.mul(255))
     ])
+
+    # Image folder requires images to be organized this way
+    # root/dog/xxx.png
+    # root/dog/xxy.png
+    # root/dog/xxz.png
+
+    # root/cat/xxx.png
+    # root/cat/xxy.png
+    # root/cat/xxz.png
+
+    # LOOK AT CYCLEGAN DATA LOADER WHICH RELAXES THIS RESTRICTION
     train_dataset = datasets.ImageFolder(args.dataset, transform)
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size)
 
