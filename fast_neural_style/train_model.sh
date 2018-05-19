@@ -1,0 +1,1 @@
+python neural_style/neural_style.py train --dataset datasets_cyclegan/5888/256/ --style-image images/style-images/terrain_target.png --save-model-dir saved_models/ --epochs 2 --cuda 1 --content-weight 1e5 --style-weight 1e10
