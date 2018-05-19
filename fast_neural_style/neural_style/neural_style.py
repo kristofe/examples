@@ -51,6 +51,7 @@ def train(args):
     # root/cat/xxz.png
 
     # LOOK AT CYCLEGAN DATA LOADER WHICH RELAXES THIS RESTRICTION
+    # SketchTerrain/datasets.py:TerrainDatasetCyclegan
     train_dataset = datasets.ImageFolder(args.dataset, transform)
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size)
 
