@@ -44,6 +44,18 @@ def train(args):
         train_dataset = datasets.CocoDetection(root=args.dataset, annFile=args.dataset + args.annfile, transform)
     else:
         train_dataset = datasets.ImageFolder(args.dataset, transform)
+
+    # Image folder requires images to be organized this way
+    # root/dog/xxx.png
+    # root/dog/xxy.png
+    # root/dog/xxz.png
+
+    # root/cat/xxx.png
+    # root/cat/xxy.png
+    # root/cat/xxz.png
+
+    # LOOK AT CYCLEGAN DATA LOADER WHICH RELAXES THIS RESTRICTION
+    # SketchTerrain/datasets.py:TerrainDatasetCyclegan
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size)
 
     transformer = TransformerNet().to(device)
