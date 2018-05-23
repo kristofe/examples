@@ -30,6 +30,7 @@ def check_paths(args):
 
 def train(args):
     device = torch.device("cuda" if args.cuda else "cpu")
+    print "device: " + str(device)
 
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
@@ -82,10 +83,11 @@ def train(args):
         count = 0
         for batch_id, (x, _) in enumerate(train_loader):
             n_batch = len(x)
+            x = x.to(device)
             count += n_batch
             optimizer.zero_grad()
 
-            y = transformer(x.to(device))
+            y = transformer(x)
 
             y = utils.normalize_batch(y)
             x = utils.normalize_batch(x)
@@ -221,6 +223,9 @@ def main():
                                   help="number of images after which the training loss is logged, default is 500")
     train_arg_parser.add_argument("--checkpoint-interval", type=int, default=2000,
                                   help="number of batches after which a checkpoint of the trained model will be created")
+    train_arg_parser.add_argument('--use_coco', action='store_true', default=False, help='use CoCo dataset')
+    train_arg_parser.add_argument('--ann_file', default='annotations/instances_train2017.json', type=str,
+                                 help='path to annotations file for coco')
 
     eval_arg_parser = subparsers.add_parser("eval", help="parser for evaluation/stylizing arguments")
     eval_arg_parser.add_argument("--content-image", type=str, required=True,
@@ -235,9 +240,6 @@ def main():
                                  help="set it to 1 for running on GPU, 0 for CPU")
     eval_arg_parser.add_argument("--export_onnx", type=str,
                                  help="export ONNX model to a given file")
-    eval_arg_parser.add_argument('--use_coco', action='store_true', default=False, help='use CoCo dataset')
-    eval_arg_parser.add_argument('--ann_file', default='datasets/coco2017/annotations/instances_train2017.json', type=str,
-                        help='path to annotations file for coco')
 
     args = main_arg_parser.parse_args()
 
