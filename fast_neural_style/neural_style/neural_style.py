@@ -40,8 +40,9 @@ def train(args):
         transforms.ToTensor(),
         transforms.Lambda(lambda x: x.mul(255))
     ])
-    if(args.use_coco):
-        train_dataset = datasets.CocoDetection(root=args.dataset, annFile=args.dataset + args.annfile, transform)
+    if args.use_coco:
+        train_dataset = datasets.CocoDetection(root=args.dataset, annFile=args.dataset + args.ann_file,
+                                               transform=transform)
     else:
         train_dataset = datasets.ImageFolder(args.dataset, transform)
 
@@ -110,9 +111,9 @@ def train(args):
             if (batch_id + 1) % args.log_interval == 0:
                 mesg = "{}\tEpoch {}:\t[{}/{}]\tcontent: {:.6f}\tstyle: {:.6f}\ttotal: {:.6f}".format(
                     time.ctime(), e + 1, count, len(train_dataset),
-                                  agg_content_loss / (batch_id + 1),
-                                  agg_style_loss / (batch_id + 1),
-                                  (agg_content_loss + agg_style_loss) / (batch_id + 1)
+                    agg_content_loss / (batch_id + 1),
+                    agg_style_loss / (batch_id + 1),
+                    (agg_content_loss + agg_style_loss) / (batch_id + 1)
                 )
                 print(mesg)
 
@@ -145,7 +146,8 @@ def stylize(args):
     content_image = content_image.unsqueeze(0).to(device)
 
     if args.model.endswith(".onnx"):
-        output = stylize_onnx_caffe2(content_image, args)
+        None
+        #output = stylize_onnx_caffe2(content_image, args)
     else:
         with torch.no_grad():
             style_model = TransformerNet()
@@ -163,7 +165,7 @@ def stylize(args):
                 output = style_model(content_image).cpu()
     utils.save_image(args.output_image, output[0])
 
-
+'''
 def stylize_onnx_caffe2(content_image, args):
     """
     Read ONNX model and run it using Caffe2
@@ -181,7 +183,7 @@ def stylize_onnx_caffe2(content_image, args):
     c2_out = prepared_backend.run(inp)[0]
 
     return torch.from_numpy(c2_out)
-
+'''
 
 def main():
     main_arg_parser = argparse.ArgumentParser(description="parser for fast-neural-style")
@@ -234,6 +236,8 @@ def main():
     eval_arg_parser.add_argument("--export_onnx", type=str,
                                  help="export ONNX model to a given file")
     eval_arg_parser.add_argument('--use_coco', action='store_true', default=False, help='use CoCo dataset')
+    eval_arg_parser.add_argument('--ann_file', default='datasets/coco2017/annotations/instances_train2017.json', type=str,
+                        help='path to annotations file for coco')
 
     args = main_arg_parser.parse_args()
 
