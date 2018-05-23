@@ -40,7 +40,10 @@ def train(args):
         transforms.ToTensor(),
         transforms.Lambda(lambda x: x.mul(255))
     ])
-    train_dataset = datasets.ImageFolder(args.dataset, transform)
+    if(args.use_coco):
+        train_dataset = datasets.CocoDetection(root=args.dataset, annFile=args.dataset + args.annfile, transform)
+    else:
+        train_dataset = datasets.ImageFolder(args.dataset, transform)
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size)
 
     transformer = TransformerNet().to(device)
@@ -218,6 +221,7 @@ def main():
                                  help="set it to 1 for running on GPU, 0 for CPU")
     eval_arg_parser.add_argument("--export_onnx", type=str,
                                  help="export ONNX model to a given file")
+    eval_arg_parser.add_argument('--use_coco', action='store_true', default=False, help='use CoCo dataset')
 
     args = main_arg_parser.parse_args()
 

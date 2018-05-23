@@ -1,0 +1,4 @@
+git clone git@github.com:cocodataset/cocoapi.git
+
+cd cocoapi/PythonAPI
+make
