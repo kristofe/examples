@@ -1,5 +1,5 @@
 model=$1
-if [$# -eq 0 ]
+if [ $# -eq 0 ]
   then
     echo "No arguments supplied.  Using default model"
     model = "saved_models/epoch_2_Thu_May_24_11:23:13_2018_100000.0_1e+15.model.pth"
