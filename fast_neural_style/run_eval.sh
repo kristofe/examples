@@ -1,1 +1,2 @@
-python neural_style/neural_style.py eval  --content-image images/content-images/terrain_input.png --model saved_models/mosaic.pth --output-image images/output-images/terrain_mosaic.png --cuda 1
+#python neural_style/neural_style.py eval  --content-image images/content-images/terrain_input.png --model saved_models/mosaic.pth --output-image images/output-images/terrain_mosaic.png --cuda 1
+python neural_style/neural_style.py eval  --content-image images/content-images/terrain_input.png --model saved_models/052318_cw_1e5_sw_1e10_Epoch2.model.pth --output-image images/output-images/terrain_mosaic.png --cuda 1
